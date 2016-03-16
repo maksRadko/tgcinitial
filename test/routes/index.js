@@ -5,7 +5,6 @@
 var should  = require('chai').should(),
     request = require('supertest');
 
-
 describe("/", function () {
 
   it('should return a message', function (done) {

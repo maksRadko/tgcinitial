@@ -6,15 +6,11 @@ const config = require('config'),
       app = require('../app'),
       bunyan = require('bunyan'),
       PrettyStream = require('bunyan-prettystream'),
+      chai = require('chai'),
       request = require('supertest');
 
 var server;
-
-var heloo = () => {
-  console.log('hello')
-};
-
-heloo();
+const expect = chai.expect();
 
 before(function (done) {
 

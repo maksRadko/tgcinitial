@@ -3,7 +3,7 @@
 'use strict';
 
 var should  = require('chai').should(),
-    request = require('supertest');
+    request = require('supertest')
 
 
 describe("/test", function () {

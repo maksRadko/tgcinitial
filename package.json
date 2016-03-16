@@ -4,11 +4,13 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "demon":"nodemon --exec node server.js",
+    "predemon": "npm run test",
+    "demon": "nodemon --exec node server.js",
     "start": "./node_modules/.bin/forever start --append -o ./forever.log -e ./forever.log server.js",
     "stop": "./node_modules/.bin/forever stop server.js",
     "status": "./node_modules/.bin/forever list",
-    "test": "./node_modules/.bin/mocha -R spec test/server.es6 test/**/*.js --compilers js:babel-register",
+    "test": "./node_modules/.bin/mocha -R nyan test/server.js test/**/*.js --compilers js:babel-register",
+    "test-watch": "./node_modules/.bin/mocha -R nyan --watch test/server.js test/**/*.js --compilers js:babel-register",
     "babel-node": "babel-node --presets=es2015 --ignore='node_modules'"
   },
   "dependencies": {
@@ -16,8 +18,10 @@
     "chai": "^3.5.0",
     "config": "^1.14.0",
     "forever": "^0.14.1",
+    "jscoverage": "^0.6.0",
     "json5": "^0.4.0",
     "nodemon": "^1.9.1",
+    "nyan": "^1.0.3",
     "restify": "^4.0.4"
   },
   "devDependencies": {
@@ -27,10 +31,18 @@
     "babel-register": "^6.7.2",
     "bunyan-prettystream": "hadfieldn/node-bunyan-prettystream",
     "chai": "^3.0.0",
+    "expect": "^1.15.2",
     "mocha": "^2.2.5",
     "supertest": "^1.0.1"
   },
-  "babel": {},
+  "nodemon": {
+    "verbose": true,
+    "ignore": [
+      "test/server.es6",
+      "test/**/*.es6",
+      "node_modules/*"
+    ]
+  },
   "engine": {
     "node": ">=0.10"
   }
