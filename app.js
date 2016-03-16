@@ -9,8 +9,7 @@ var path    = require('path'),
 
 
 exports.createServer = createServer;
-
-
+let hello;
 /*
  * Set up server
  * @return the created server

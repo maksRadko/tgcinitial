@@ -2,13 +2,19 @@
    baseURL:true, process:true */
 "use strict";
 
-const config       = require('config'),
-    app          = require('../app'),
-    bunyan       = require('bunyan'),
-    PrettyStream = require('bunyan-prettystream'),
-    request      = require('supertest');
+const config = require('config'),
+      app = require('../app'),
+      bunyan = require('bunyan'),
+      PrettyStream = require('bunyan-prettystream'),
+      request = require('supertest');
 
 var server;
+
+var heloo = () => {
+  console.log('hello')
+};
+
+heloo();
 
 before(function (done) {
 
@@ -16,11 +22,11 @@ before(function (done) {
   bunyanToConsole.pipe(process.stdout);
   
   var logger = bunyan.createLogger({
-    name: 'testLogger',
-    streams: [{
-      level: 'error',
-      type: 'raw',
-      stream: bunyanToConsole
+    name     : 'testLogger',
+    streams  : [{
+      level  : 'error',
+      type   : 'raw',
+      stream : bunyanToConsole
     }]
   });
   
