@@ -2,14 +2,12 @@
 
 'use strict';
 
-var path    = require('path'),
-    restify = require('restify'),
-    config  = require('config'),
-    routes  = require('./routes');
-
+const path    = require('path'),
+      restify = require('restify'),
+      config  = require('config'),
+      routes  = require('./routes');
 
 exports.createServer = createServer;
-let hello;
 /*
  * Set up server
  * @return the created server

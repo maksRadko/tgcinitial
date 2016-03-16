@@ -2,12 +2,12 @@
 
 'use strict';
 
-var should  = require('chai').should(),
+const should  = require('chai').should(),
     request = require('supertest');
 
-describe("/", function () {
+describe("/", () => {
 
-  it('should return a message', function (done) {
+  it('should return a message', (done) => {
     request(baseURL)
       .get('/')
       .set('Accept', 'application/json')

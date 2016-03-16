@@ -2,19 +2,18 @@
 
 'use strict';
 
-var should  = require('chai').should(),
+const should  = require('chai').should(),
     request = require('supertest')
 
+describe("/test", () => {
 
-describe("/test", function () {
-
-  it('should return { "result": "test" }', function (done) {
+  it('should return { "result": "test" }', (done) => {
     request(baseURL)
       .get('/test')
       .set('Accept', 'application/json')
       .expect('Content-Type', 'application/json')
       .expect(200)
-      .end(function (err, res) {
+      .end( (err, res) => {
         if (err) return done(err);
         
         res.body.should.be.an('object');
@@ -24,5 +23,4 @@ describe("/test", function () {
         return done();
       });
   });
-
 });
