@@ -1,9 +1,9 @@
-module.exports = function(server, logger) {
+module.exports = function(server) {
   
   // Sample route
-  server.get('/test', function (req, res, next) {
-    res.send({ 'result': 'test' });      
-    return next();
+  server.get('/', function (req, res, next) {
+    res.send({ 'result': 'test' });
+    console.log('sdfgdfgd');
   });
-  
+
 };
