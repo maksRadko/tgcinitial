@@ -1,83 +1,80 @@
 /* global process:true */
 
 'use strict';
-const path = require('path'),
-    //cluster = require('cluster'),
-    config = require('config'),
-    MyApp = require('./app'),
-  restify = require('restify'),
-  requireFu = require('require-fu'),
-    logging = require('./logging');
-
+const path    = require('path'),
+    cluster = require('cluster'),
+    config    = require('config'),
+    MyApp     = require('./app'),
+    restify   = require('restify'),
+    requireFu = require('require-fu');
 
 // if process.env.NODE_ENV has not been set, default to development
 var NODE_ENV = process.env.NODE_ENV || 'development';
   
 //exports.run = run;
 
-var app = new MyApp(config);
+const app = new MyApp(config);
+const logger = app.logger;
 
-//function spawnWorker () {
+
+function spawnWorker () {
   // create servers
-  var server = restify.createServer('Oleh');;
+  var server = app.createServer();
 
   // start listening
-  //var port = config.get('server.port');
+  var port = config.get('server.port');
 
-  server.listen(3000, function () {
-    //logger.info('%s listening at %s', server.name, server.url);
-    console.log('sfdsgfs');
+  server.listen(port, function () {
+    logger.info('%s listening at %s', server.name, server.url);
   });
-  //requireFu(__dirname + '/routes')(server);
-//}
+  requireFu(__dirname + '/routes')(server);
+}
+
 //spawnWorker();
 
-//function createCluster (logger) {
-//
-//  // Set up cluster and start servers
-//  if (cluster.isMaster) {
-//    var numCpus = require('os').cpus().length;
-//
-//    logger.info('Starting master, pid ' + process.pid + ', spawning '
-//      + numCpus + ' workers');
-//
-//    // fork workers
-//    for (var i = 0; i < numCpus; i++) {
-//      cluster.fork();
-//    }
-//
-//    cluster.on('listening', function (worker) {
-//      logger.info('Worker ' + worker.id + ' started');
-//    });
-//
-//    // if a worker dies, respawn
-//    cluster.on('death', function (worker) {
-//      logger.warn('Worker ' + worker.id + ' died, restarting...');
-//      cluster.fork();
-//    });
-//
-//  }
-//  // Worker processes
-//  else {
-//    spawnWorker(logger);
-//  }
-//}
-//
-//function run (cluster) {
-//
-//  // Set up logging
-//  var logger = logging.createLogger(config.get('logging'));
-//
-//  // In production environment, create a cluster
-//  if (NODE_ENV === 'production'
-//      || Boolean(config.get('server.cluster'))
-//      || cluster ) {
-//    createCluster(logger);
-//  }
-//  else {
-//    spawnWorker(logger);
-//  }
-//
-//}
+function createCluster (logger) {
 
-//run();
+  // Set up cluster and start servers
+  if (cluster.isMaster) {
+    var numCpus = require('os').cpus().length;
+
+    logger.info('Starting master, pid ' + process.pid + ', spawning '
+      + numCpus + ' workers');
+
+    // fork workers
+    for (var i = 0; i < numCpus; i++) {
+      cluster.fork();
+    }
+
+    cluster.on('listening', function (worker) {
+      logger.info('Worker ' + worker.id + ' started');
+    });
+
+    // if a worker dies, respawn
+    cluster.on('death', function (worker) {
+      logger.warn('Worker ' + worker.id + ' died, restarting...');
+      cluster.fork();
+    });
+
+  }
+  // Worker processes
+  else {
+    spawnWorker(logger);
+  }
+}
+
+function run (cluster) {
+
+   //In production environment, create a cluster
+  if (NODE_ENV === 'production'
+      || Boolean(config.get('server.cluster'))
+      || cluster ) {
+    createCluster(logger);
+  }
+  else {
+    spawnWorker();
+  }
+
+}
+//
+run();

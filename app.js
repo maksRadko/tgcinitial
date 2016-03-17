@@ -14,7 +14,7 @@ class MyApp {
     this.name   = (this['_settings'].has('server.name') && this['_settings'].get('server.name'))
       ? this['_settings'].get('server.name')
       : require(path.join(__dirname, 'package')).name;
-    //this.logger = logging.createLogger(config.get('logging'));
+    this.logger = logging.createLogger(config.get('logging'));
     this.db     = null;
   }
   createServer() {
