@@ -36,5 +36,6 @@ dump.rdb
 node_modules
 
 # IDE settings
+/
 .settings
 .idea

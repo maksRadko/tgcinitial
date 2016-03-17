@@ -1,3 +1,5 @@
+/* global process:true */
+
 'use strict';
 process.on('uncaughtException', (err) => {
   console.error(err);
@@ -23,12 +25,13 @@ const logger = app.logger;
 function spawnWorker () {
   // create servers
   var server = app.createServer();
-  logger.info('here');
+
   // start listening
   var port = config.get('server.port');
 
   server.listen(port, function () {
     logger.info(`${server.name} listening at ${server.url}`);
+    console.info(`${server.url}`);
   });
   requireFu(__dirname + '/routes')(app);
 }

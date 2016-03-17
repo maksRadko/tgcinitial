@@ -4,7 +4,7 @@
 
 var path    = require('path'),
     restify = require('restify'),
-
+    db = require('./dynamo'),
     logging = require('./logging');
 
 let _settings = new WeakMap();
@@ -16,7 +16,7 @@ class MyApp {
       ? this[_settings].get('server.name')
       : require(path.join(__dirname, 'package')).name;
     this.logger = logging.createLogger(config.get('logging'));
-    this.db     = null;
+    this.db     = db.hello();
   }
   createServer() {
     this.server = restify.createServer(this.name);
