@@ -1,5 +1,3 @@
-/* global process:true, __dirname:true */
-
 'use strict';
 
 var fs     = require('fs'),

@@ -6,14 +6,16 @@ var path    = require('path'),
     restify = require('restify'),
     logging = require('./logging');
 
-//let '_settings'= new WeakMap();
+let _settings= new WeakMap();
 
 class MyApp {
   constructor(config) {
-    this['_settings'] = config; // Private property
-    this.name         = (this['_settings'].has('server.name') && this['_settings'].get('server.name')) ? this['_settings'].get('server.name') : require(path.join(__dirname, 'package')).name;
-    this.logger       = logging.createLogger(config.get('logging'));
-    this.db           = null;
+    this[_settings] = config; // Private property
+    this.name   = (this[_settings].has('server.name') && this[_settings].get('server.name'))
+      ? this[_settings].get('server.name')
+      : require(path.join(__dirname, 'package')).name;
+    this.logger = logging.createLogger(config.get('logging'));
+    this.db     = null;
   }
   createServer() {
     this.server = restify.createServer(this.name);

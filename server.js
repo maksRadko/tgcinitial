@@ -1,16 +1,17 @@
 /* global process:true */
 
 'use strict';
-const path    = require('path'),
-    cluster   = require('cluster'),
-    config    = require('config'),
-    MyApp     = require('./app'),
-    restify   = require('restify'),
-    requireFu = require('require-fu');
+const path      = require('path'),
+      cluster   = require('cluster'),
+      config    = require('config'),
+      restify   = require('restify'),
+      requireFu = require('require-fu'),
+
+      MyApp     = require('./app');
 
 // if process.env.NODE_ENV has not been set, default to development
 var NODE_ENV = process.env.NODE_ENV || 'development';
-  
+console.log(NODE_ENV);
 //exports.run = run;
 
 const app = new MyApp(config);
@@ -25,14 +26,14 @@ function spawnWorker () {
   var port = config.get('server.port');
 
   server.listen(port, function () {
-    logger.info('%s listening at %s', server.name, server.url);
+    console.log(`${server.name} listening at ${server.url}`);
   });
   requireFu(__dirname + '/routes')(app);
 }
 
 //spawnWorker();
 
-function createCluster (logger) {
+function createCluster () {
 
   // Set up cluster and start servers
   if (cluster.isMaster) {
@@ -67,9 +68,8 @@ function run (cluster) {
 
    //In production environment, create a cluster
   if (NODE_ENV === 'production'
-      || Boolean(config.get('server.cluster'))
-      || cluster ) {
-    createCluster(logger);
+      || Boolean(config.get('server.cluster'))) {
+    createCluster();
   }
   else {
     spawnWorker();
