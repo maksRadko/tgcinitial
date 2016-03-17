@@ -3,14 +3,25 @@
 "use strict";
 
 const config = require('config'),
-      app = require('../app'),
+      MyApp = require('../app'),
       bunyan = require('bunyan'),
       PrettyStream = require('bunyan-prettystream'),
       chai = require('chai'),
-      request = require('supertest');
+      request = require('supertest'),
+      path = require('path'),
+      routes = ['test', 'index'];
 
 var server;
-const expect = chai.expect();
+const expect = chai.expect(),
+    app = new MyApp(config);
+
+var routesConnection = (routesArr) => {
+  var routPath = '../routes/'
+  routesArr.forEach((route) => {
+    var reqRoute = require(routPath + route);
+    reqRoute(app);
+  })
+};
 
 before(function (done) {
 
@@ -26,8 +37,10 @@ before(function (done) {
     }]
   });
   
-  server = app.createServer(logger);
-  
+  server = app.createServer();
+
+  routesConnection(routes);
+
   // start listening
   var port = config.get('server.port');
   server.listen(port, function () {

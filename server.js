@@ -2,7 +2,7 @@
 
 'use strict';
 const path    = require('path'),
-    cluster = require('cluster'),
+    cluster   = require('cluster'),
     config    = require('config'),
     MyApp     = require('./app'),
     restify   = require('restify'),
@@ -15,7 +15,7 @@ var NODE_ENV = process.env.NODE_ENV || 'development';
 
 const app = new MyApp(config);
 const logger = app.logger;
-
+global.ROOT_DIR = __dirname;
 
 function spawnWorker () {
   // create servers
@@ -27,7 +27,7 @@ function spawnWorker () {
   server.listen(port, function () {
     logger.info('%s listening at %s', server.name, server.url);
   });
-  requireFu(__dirname + '/routes')(server);
+  requireFu(__dirname + '/routes')(app);
 }
 
 //spawnWorker();
