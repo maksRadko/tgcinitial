@@ -29,19 +29,20 @@ function createLogger (settings) {
   if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 
   // Log to console and log file
-  winston.remove(winston.transports.Console);
-  winston.add(winston.transports.Console, {
-    colorize: true,
-    timestamp: function() {
-      let date = new Date();
-      return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.toTimeString().substr(0,5) + ' [' + global.process.pid + ']';
-    },
-    level: logLevel
+  const logger = new winston.Logger;
+
+  logger.add(winston.transports.Console, {
+      colorize: true,
+      timestamp: function() {
+        let date = new Date();
+        return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.toTimeString().substr(0,5) + ' [' + global.process.pid + ']';
+      },
+      level: logLevel
   });
 
-  winston.info('Starting ' + appName + ', version ' + appVersion);
-  winston.info('Environment set to ' + process.env.NODE_ENV);
-  winston.debug('Logging setup completed.');
+  logger.info('Starting ' + appName + ', version ' + appVersion);
+  logger.info('Environment set to ' + process.env.NODE_ENV);
+  logger.debug('Logging setup completed.');
 
-  return winston;
+  return logger;
 }
