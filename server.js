@@ -1,6 +1,9 @@
-/* global process:true */
-
 'use strict';
+process.on('uncaughtException', (err) => {
+  console.error(err);
+  if (err && err.stack)
+    console.error(err.stack);
+});
 const path      = require('path'),
       cluster   = require('cluster'),
       config    = require('config'),
@@ -11,27 +14,24 @@ const path      = require('path'),
 
 // if process.env.NODE_ENV has not been set, default to development
 var NODE_ENV = process.env.NODE_ENV || 'development';
-console.log(NODE_ENV);
-//exports.run = run;
+global.env = NODE_ENV;
+global.appDir = __dirname;
 
 const app = new MyApp(config);
 const logger = app.logger;
-global.ROOT_DIR = __dirname;
 
 function spawnWorker () {
   // create servers
   var server = app.createServer();
-
+  logger.info('here');
   // start listening
   var port = config.get('server.port');
 
   server.listen(port, function () {
-    console.log(`${server.name} listening at ${server.url}`);
+    logger.info(`${server.name} listening at ${server.url}`);
   });
   requireFu(__dirname + '/routes')(app);
 }
-
-//spawnWorker();
 
 function createCluster () {
 
@@ -67,8 +67,7 @@ function createCluster () {
 function run (cluster) {
 
    //In production environment, create a cluster
-  if (NODE_ENV === 'production'
-      || Boolean(config.get('server.cluster'))) {
+  if (NODE_ENV === 'production' || Boolean(config.get('server.cluster'))) {
     createCluster();
   }
   else {

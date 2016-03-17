@@ -4,9 +4,10 @@
 
 var path    = require('path'),
     restify = require('restify'),
+
     logging = require('./logging');
 
-let _settings= new WeakMap();
+let _settings = new WeakMap();
 
 class MyApp {
   constructor(config) {

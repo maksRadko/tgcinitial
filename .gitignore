@@ -23,7 +23,7 @@ coverage
 # Local configuration
 config/*
 !config/default.json5
-!config/local.json5
+!config/local.json5.example
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
