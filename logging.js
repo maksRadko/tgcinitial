@@ -32,12 +32,12 @@ function createLogger (settings) {
   const logger = new winston.Logger;
 
   logger.add(winston.transports.Console, {
-      colorize: true,
-      timestamp: function() {
-        let date = new Date();
-        return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.toTimeString().substr(0,5) + ' [' + global.process.pid + ']';
-      },
-      level: logLevel
+    colorize: true,
+    timestamp: function() {
+      let date = new Date();
+      return date.getDate() + '/' + (date.getMonth() + 1) + ' ' + date.toTimeString().substr(0,5) + ' [' + global.process.pid + ']';
+    },
+    level: logLevel
   });
 
   logger.info('Starting ' + appName + ', version ' + appVersion);

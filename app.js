@@ -20,8 +20,14 @@ class MyApp {
   }
   createServer() {
     this.server = restify.createServer(this.name);
+    this.server.use(restify.CORS({
+      origins: this[_settings].get('app.origins'),
+      credentials: true,
+      headers: []
+    }));
     this.server.use(restify.acceptParser(this.server.acceptable));
     this.server.use(restify.queryParser());
+    this.server.use(restify.bodyParser());
 
     this.server.on('NotFound', (req, res, next) => {
       this.logger.debug('404', 'No route that matches request for ' + req.url);

@@ -1,6 +1,5 @@
-/* global process:true */
-
 'use strict';
+
 process.on('uncaughtException', (err) => {
   console.error(err);
   if (err && err.stack)

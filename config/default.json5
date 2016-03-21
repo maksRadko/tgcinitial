@@ -10,5 +10,8 @@
   logging: {
     dir: "logs",
     level: "debug"
+  },
+  app: {
+    origins: ["*"]
   }
 }
