@@ -27,7 +27,8 @@ class MyApp {
     }));
     this.server.use(restify.acceptParser(this.server.acceptable));
     this.server.use(restify.queryParser());
-    this.server.use(restify.bodyParser());
+    //this.server.use(req.log);
+    //this.server.use(restify.bodyParser());
 
     this.server.on('NotFound', (req, res, next) => {
       this.logger.debug('404', 'No route that matches request for ' + req.url);

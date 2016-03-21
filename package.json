@@ -16,10 +16,15 @@
   "dependencies": {
     "aws-dynamodb": "^0.1.51",
     "aws-sdk": "^2.2.44",
+    "bluebird": "^3.3.4",
     "colors": "^1.1.2",
     "config": "^1.14.0",
+    "csvtojson": "^0.5.2",
     "forever": "^0.14.1",
+    "formidable": "^1.0.17",
     "json5": "^0.4.0",
+    "multer": "^1.1.0",
+    "multer-s3": "^1.4.1",
     "nodemon": "^1.9.1",
     "nyan": "^1.0.3",
     "require-fu": "^1.0.0",
@@ -43,6 +48,7 @@
       "test/server.js",
       "test/**/*.js",
       "logs/**/*.json",
+      "uploads/*.json",
       "*.log",
       "node_modules/*"
     ]
