@@ -4,7 +4,6 @@
 
 const config = require('config'),
       MyApp = require('../app'),
-      bunyan = require('bunyan'),
       PrettyStream = require('bunyan-prettystream'),
       chai = require('chai'),
       request = require('supertest'),
@@ -24,19 +23,6 @@ var routesConnection = (routesArr) => {
 };
 
 before(function (done) {
-
-  var bunyanToConsole = new PrettyStream();
-  bunyanToConsole.pipe(process.stdout);
-  
-  var logger = bunyan.createLogger({
-    name     : 'testLogger',
-    streams  : [{
-      level  : 'error',
-      type   : 'raw',
-      stream : bunyanToConsole
-    }]
-  });
-  
   server = app.createServer();
 
   routesConnection(routes);
@@ -44,7 +30,7 @@ before(function (done) {
   // start listening
   var port = config.get('server.port');
   server.listen(port, function () {
-    logger.info('%s listening at %s', server.name, server.url);
+    app.logger.info('%s listening at %s', server.name, server.url);
   });
   
   global.baseURL = 'http://localhost:' + port;

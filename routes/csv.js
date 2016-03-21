@@ -11,6 +11,19 @@ const Converter = require("csvtojson").Converter,
 var upload = multer({
     dest: 'uploads/'
 });
+//s3
+///var upload = multer({
+//    storage: s3({
+//        dirname: 'uploads/photos',
+//        bucket: 'some-bucket',
+//        secretAccessKey: 'some secret',
+//        accessKeyId: 'some key',
+//        region: 'us-east-1',
+//        filename: function (req, file, cb) {
+//            cb(null, Date.now())
+//        }
+//    })
+//})
 
 const writeFileInTo = (data, name) => {
     var newPath = appDir + "/uploads/"  + path.basename(name, '.csv') + '.json';
@@ -56,33 +69,9 @@ module.exports = (app) => {
 
     app.server.post('/csvConverter', upload.single('filecsv'), (req, res, next) => {
         console.log(req.file);
-        //var upload = multer({
-        //    storage: s3({
-        //        dirname: 'uploads/photos',
-        //        bucket: 'some-bucket',
-        //        secretAccessKey: 'some secret',
-        //        accessKeyId: 'some key',
-        //        region: 'us-east-1',
-        //        filename: function (req, file, cb) {
-        //            cb(null, Date.now())
-        //        }
-        //    })
-        //})
-        //var resultArr = [];
-        //var fileName = req.files.filecsv.name;
-        //
-        //
-        //readFile(req.files.filecsv.path)
-        //    .then((data) => {
-        //        var strBuff = data.toString();
-        //        storeFileToS3(strBuff, fileName)
-        //    })
-        //    .catch((err) => {
-        //        app.logger.error(err);
-        //        next(err)
-        //    })
     });
 
+    //local on file system
     //app.server.post('/csvConverter', (req, res, next) => {
     //    var converter = new Converter({constructResult:false});
     //    var resultArr = [];
