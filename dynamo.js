@@ -18,10 +18,6 @@ module.exports.initDb = () => {
   return DynamoDB(db)
 };
 
-module.exports.hello = () => {
-  console.log('hello')
-};
-
 //module.exports = {
 //    storage:s3,
 //    db:db,

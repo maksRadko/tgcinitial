@@ -1,5 +1,3 @@
-/* global process:true, __dirname:true */
-
 'use strict';
 
 var path    = require('path'),
@@ -11,19 +9,23 @@ let _settings = new WeakMap();
 
 class MyApp {
   constructor(config) {
-    this[_settings] = config; // Private property
-    this.name   = (this[_settings].has('server.name') && this[_settings].get('server.name'))
-      ? this[_settings].get('server.name')
-      : require(path.join(__dirname, 'package')).name;
+    this[_settings] = config.get('app'); // Private property
+    this.name   = config.get('server.name') || require(path.join(__dirname, 'package')).name;
     this.logger = logging.createLogger(config.get('logging'));
-    this.db     = db.hello();
+    this.db     = db;
   }
   createServer() {
     this.server = restify.createServer(this.name);
     this.server.use(restify.CORS({
-      origins: this[_settings].get('app.origins'),
-      credentials: true,
-      headers: []
+      origins: this[_settings].origins,
+      credentials: this[_settings].credentials,
+      headers: this[_settings].headers
+    }));
+    // Allow five requests/second by IP, and burst to 10
+    this.server.use(restify.throttle({
+      burst: 10,
+      rate: 5,
+      ip: true
     }));
     this.server.use(restify.acceptParser(this.server.acceptable));
     this.server.use(restify.queryParser());
@@ -34,6 +36,9 @@ class MyApp {
       this.logger.debug('404', 'No route that matches request for ' + req.url);
       res.send(404, req.url + ' was not found');
     });
+    this.server.on('MethodNotAllowed', function (request, response, cb) {});
+    this.server.on('UnsupportedMediaType', function (request, response, cb) {});
+    this.server.on('uncaughtException', function (request, response, route, error) {});
     return this.server;
   }
 }
