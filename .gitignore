@@ -21,7 +21,6 @@ coverage
 .lock-wscript
 
 # Local configuration
-config/*
 !config/default.json5
 !config/local.json5.example
 
