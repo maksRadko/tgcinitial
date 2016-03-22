@@ -5,18 +5,17 @@ var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
 
 AWS.config.credentials = credentials;
 AWS.config.update({
-  region: "us-west-2",
-  endpoint: "https://dynamodb.us-west-2.amazonaws.com"
+  region: "us-west-2"
 });
 
-const db = new AWS.DynamoDB();
-const dbDocCli = new AWS.DynamoDB.DocumentClient();
+//const db = new AWS.DynamoDB();
+//const dbDocCli = new AWS.DynamoDB.DocumentClient();
 
 module.exports.initDb = () => {
   return {
-    dbDocCli:dbDocCli,
-    db:db,
-    config:AWS.config.credentials
+    dbDocCli:new AWS.DynamoDB.DocumentClient(),
+    db:new AWS.DynamoDB({endpoint: "https://dynamodb.us-west-2.amazonaws.com"}),
+    config:AWS.config
   }
 };
 

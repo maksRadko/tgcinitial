@@ -5,70 +5,33 @@ const Converter = require("csvtojson").Converter,
     stat = Promise.promisify(require("fs").stat),
     path = require("path"),
     multer = require('multer'),
-    s3 = require('multer-s3'),
+    s3 = require('multer-storage-s3'),
     uuid = require('uuid'),
     writeFile = Promise.promisify(require("fs").writeFile),
     moment = require('moment');
 
 let storeToDb = (app, fileInfo) => {
-    console.log(fileInfo)
-    //
-    //var additionalfiles = {
-    //    id:uuid.v1(),
-    //    'filename':'hello.csb',
-    //    'uploaduser':'maks',
-    //    'uploaddate':'15.04.32',
-    //    's3url':'asfdsa',
-    //    'state':'asdfasdf',
-    //    'stageresults':'asdfasdf',
-    //    'insert count':'adsfasdf',
-    //    'insert':'adsfaasdsasdf',
-    //    'update count':'asdfdsf',
-    //    'error count':'adsfsdafs'
-    //};
-    //
-    //var params = {
-    //    TableName:'s3_file_csv',
-    //    Item: additionalfiles
-    //};
-    //
-    //app.dynamo.dbDocCli.put(params, function(err, data) {
-    //    if (err) {
-    //        console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
-    //    } else {
-    //        console.log("Added item:", JSON.stringify(data, null, 2));
-    //        res.json(data)
-    //    }
-    //});
+    console.log(fileInfo, 'here')
 };
 
-var upload = multer({
-    storage: s3({
-        dirname: 'uploads/csvfiles/',
-        bucket: 'my-hello-world-bucket',
-        secretAccessKey: '7EGX0pqBmMmoJwJTBMohOfKIEDozxmqhuXQzzMhx',
-        accessKeyId: 'AKIAJZ3A4XCDFWKN2SZQ',
-        region: 'us-west-2',
-        filename: function (req, file, cb) {
-            var fileName = path.basename(file.originalname, '.csv');
+var storage = s3({
+    destination : function( req, file, cb ) {
 
-            cb(null, `${fileName}_${Date.now()}_${file.fieldname}`);
-        }
-    })
+        cb( null, 'uploads/csvfiles' );
+
+    },
+    filename    : function( req, file, cb ) {
+
+        cb( null, `${path.basename(file.originalname, '.csv')}-${file.fieldname}-${moment()}`);
+
+    },
+    bucket      : 'my-hello-world-bucket'
 });
 
-const writeFileInTo = (data, name) => {
-    var newPath = appDir + "/uploads/"  + path.basename(name, '.csv') + '.json';
+var upload = multer({
+    storage: storage
+});
 
-    writeFile(newPath, data)
-        .then(() => {
-            console.log('filw write successful')
-        })
-};
-
-const storeFileToS3 = (file, name) => {
-
-};
 module.exports = (app) => {
 
     app.server.get('/getConvertedFilesList', (req, res, next) => {
@@ -78,7 +41,29 @@ module.exports = (app) => {
                 res.json(data)
             })
     });
-    
+
+    //app.server.get('/hello', (req, res, next) => {
+    //
+    //    var additionalfiles = {
+    //        'id':'dfsajhg23hkufs',
+    //        'uploaddate':'15.04.32'
+    //    };
+    //
+    //    var params = {
+    //        TableName:'s3_file_csv',
+    //        Item: additionalfiles
+    //    };
+    //
+    //    app.dynamo.dbDocCli.put(params, function(err, data) {
+    //        if (err) {
+    //            console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+    //        } else {
+    //            console.log("Added item:", JSON.stringify(data, null, 2));
+    //            res.json(data)
+    //        }
+    //    });
+    //});
+
     app.server.get('/getConvertedFile/:name', (req, res, next) => {
         var path = appDir + "/uploads/"  + req.params.name + '.json';
 
