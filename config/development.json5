@@ -1,0 +1,22 @@
+{
+  server: {
+    port: 8000,
+    // if false, only uses cluster if NODE_ENV is set to production
+    // if true, always uses cluster
+    cluster: false,
+    // defines the value for the Server response header
+    // if blank or undefined, uses the package name
+    name: "Supernaut"
+  },
+  logging: {
+    dir: "logs",
+    level: "debug"
+  },
+  app: {
+    cors: {
+      origins: ["*"],
+      credentials: true,
+      headers: []
+    }
+  }
+}
