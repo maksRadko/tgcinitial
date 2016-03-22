@@ -12,7 +12,7 @@ class MyApp {
     this[_settings] = config.get('app'); // Private property
     this.name   = config.get('server.name') || require(path.join(__dirname, 'package')).name;
     this.logger = logging.createLogger(config.get('logging'));
-    this.db     = db;
+    this.dynamo = db.initDb();
   }
   createServer() {
     this.server = restify.createServer(this.name);

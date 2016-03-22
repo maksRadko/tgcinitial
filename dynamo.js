@@ -1,25 +1,22 @@
 'use strict';
-const AWS    = require('aws-sdk'),
-  DynamoDB = require('aws-dynamodb');
+const AWS    = require('aws-sdk');
 
-//var credentials = new AWS.SharedIniFileCredentials({profile: 'local'});
+var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
 
-//AWS.config.credentials = credentials;
+AWS.config.credentials = credentials;
 AWS.config.update({
   region: "us-west-2",
-  endpoint: "http://localhost:5000"
+  endpoint: "https://dynamodb.us-west-2.amazonaws.com"
 });
 
-var db = new AWS.DynamoDB();
-var dynamodbstreams = new AWS.DynamoDBStreams();
-var s3 = new AWS.S3();
+const db = new AWS.DynamoDB();
+const dbDocCli = new AWS.DynamoDB.DocumentClient();
 
 module.exports.initDb = () => {
-  return DynamoDB(db)
+  return {
+    dbDocCli:dbDocCli,
+    db:db,
+    config:AWS.config.credentials
+  }
 };
 
-//module.exports = {
-//    storage:s3,
-//    db:db,
-//    dbStreams:dynamodbstreams
-//};
